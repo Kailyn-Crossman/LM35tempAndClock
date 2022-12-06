@@ -89,6 +89,7 @@ public partial class MainPage : ContentPage
                 if (recChkSum == calChkSum)
                 {
                     Temperature(newPacket);
+                    HighSensor(lmClass.avgAnalogValue(newPacket, 0));
                     oldPacketNumber = newPacketNumber;
                 }
                 else
@@ -131,6 +132,20 @@ public partial class MainPage : ContentPage
         labelTemperature.Text = temperature.ToString("  00.0") + " °C";
     }
 
+    public void HighSensor(double voltage)
+    {
+        double temperature = (voltage / 10);
+        if (temperature > 25)
+        {
+            stringBuilderSend[3] = '0';
+            labelWarning.Text = "  To Hot!";
+        } else if (temperature < 24.7)
+        {
+            stringBuilderSend[3] = '1';
+            labelWarning.Text = "  Okay";
+        }
+        sendPacket();
+    }
     private void btnOpenClose_Clicked(object sender, EventArgs e)
     {
         if (!bPortOpen)

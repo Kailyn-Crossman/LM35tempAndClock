@@ -58,6 +58,13 @@
                     x:Name="labelTemperature"
                     MinimumWidthRequest="100"/>
             </HorizontalStackLayout>
+            <HorizontalStackLayout>
+                <Label
+                    Text="Danger Warning"/>
+                <Label
+                    x:Name="labelWarning"
+                    MinimumWidthRequest="100"/>
+            </HorizontalStackLayout>
         </VerticalStackLayout>
         <VerticalStackLayout>
             <HorizontalStackLayout>
