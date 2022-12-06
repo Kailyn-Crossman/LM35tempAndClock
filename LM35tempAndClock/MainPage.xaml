@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LM35tempAndClock.MainPage">
+
+    <HorizontalStackLayout
+        Spacing="25"
+        Padding="30.0"
+        VerticalOptions="StartAndExpand">
+
+        <VerticalStackLayout>
+            <HorizontalStackLayout>
+                <Button
+                    x:Name="btnOpenClose"
+                    Text="Open"
+                    SemanticProperties.Hint="Open com port"
+                    Clicked="btnOpenClose_Clicked"/>
+                <Picker
+                    x:Name="portPicker"
+                    Title="Select ComPort"
+                    HorizontalOptions="Center"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout>
+                <Label
+                    Text="Bits"
+                    FontSize="Medium"/>
+                <Button
+                    x:Name="btnBit0"
+                    Text="1"
+                    FontSize="Medium"
+                    Clicked="btnBit0_Clicked"/>
+                <Button
+                    x:Name="btnBit1"
+                    Text="1"
+                    FontSize="Medium"
+                    Clicked="btnBit1_Clicked"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout>
+                <ImageButton
+                    x:Name="imgLED1"
+                    Source="ledoff.png"
+                    HeightRequest="200"
+                    WidthRequest="100"
+                    Clicked="imgLED1_Clicked"/>
+                <ImageButton
+                    x:Name="imgLED2"
+                    Source="ledoff.png"
+                    HeightRequest="200"
+                    WidthRequest="100"
+                    Clicked="imgLED2_Clicked"/>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+        <VerticalStackLayout>
+            <HorizontalStackLayout>
+                <Label
+                    Text="Temperature"/>
+                <Label
+                    x:Name="labelTemperature"
+                    MinimumWidthRequest="100"/>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+        <VerticalStackLayout>
+            <HorizontalStackLayout>
+                <Button
+                    x:Name="btnSend"
+                    Text="Send"
+                    Clicked="btnSend_Clicked"
+                    HorizontalOptions="Center"/>
+                <Entry
+                    x:Name="entrySend"
+                    Text="###1111196"
+                    HorizontalOptions="Center"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout>
+                <Label
+                    Text="Recieved Packet History"
+                    HorizontalOptions="Center"/>
+                <CheckBox
+                    x:Name="checkBoxHistory"
+                    IsChecked="False"
+                    HorizontalOptions="Center"/>
+                <Label
+                    Padding="100,0,0,0"
+                    Text="Parsed Packet History"/>
+                <CheckBox
+                    x:Name="checkBoxParseHistory"
+                    IsChecked="False"
+                    HorizontalOptions="Center"/>
+            </HorizontalStackLayout>
+            <Label
+                Text="Received Packet"/>
+            <ScrollView
+                x:Name="scrollViewRecData"
+                MaximumHeightRequest="500"
+                VerticalOptions="StartAndExpand"/>
+            <Label
+                x:Name="labelRXdata"
+                Text="Received Packet"
+                MinimumWidthRequest="310"/>
+            <Label
+                Text="Parsed Packet"/>
+            <HorizontalStackLayout>
+
+                <Label
+                    Text="Length    Header     Number   Analog0    Analog1    Analog2    Analog3     Analog4    Analog5    Binary       CkSumRx    CkSumCal     lost     ChkErr    Rollover  "
+                    HorizontalOptions="Center"/>
+
+            </HorizontalStackLayout>
+            <ScrollView
+                x:Name="scrollViewParseData"
+                MaximumHeightRequest="500"
+                VerticalOptions="StartAndExpand"/>
+            <Label
+                x:Name="labelParsedData"
+                Text="Parsed Packet"
+                MinimumWidthRequest="310"/>
+
+        </VerticalStackLayout>
+    </HorizontalStackLayout>
+
+</ContentPage>
