@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LM35tempAndClock.View.UserInterface"
+             Title="Temperature">
+
+    <HorizontalStackLayout
+        Spacing="25"
+        Padding="30.0"
+        VerticalOptions="StartAndExpand">
+
+        <VerticalStackLayout>
+            <HorizontalStackLayout>
+                <Button
+                    x:Name="btnOpenClose"
+                    Text="Open"
+                    SemanticProperties.Hint="Open com port"
+                    Clicked="btnOpenClose_Clicked"/>
+                <Picker
+                    x:Name="portPicker"
+                    Title="Select ComPort"
+                    HorizontalOptions="Center"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout>
+                <ImageButton
+                    x:Name="imgLED1"
+                    Source="ledoff.png"
+                    HeightRequest="200"
+                    WidthRequest="100"/>
+                <ImageButton
+                    x:Name="imgLED2"
+                    Source="ledoff.png"
+                    HeightRequest="200"
+                    WidthRequest="100"/>
+            </HorizontalStackLayout>
+            <VerticalStackLayout>
+                    <Entry
+                    x:Name="entrySend"
+                    HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+        <VerticalStackLayout>
+            <HorizontalStackLayout>
+                <Label
+                    Text="Temperature"/>
+                <Label
+                    x:Name="labelTemperature"
+                    MinimumWidthRequest="100"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout>
+                <Label
+                    Text="Danger Warning"/>
+                <Label
+                    x:Name="labelWarning"
+                    MinimumWidthRequest="100"/>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+        
+    </HorizontalStackLayout>
+
+</ContentPage>
