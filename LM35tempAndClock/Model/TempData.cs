@@ -10,6 +10,21 @@ namespace LM35tempAndClock.Model
     [ObservableObject]
     public partial class TempData
     {
+        [ObservableProperty]
+        string footBug;
 
+        public TempData()
+        {
+            FootBug = "things";
+        }
+        public void parsePacket(string newPacket)
+        {
+
+        }
+
+        public string getPacketNumber(string newPacket)
+        {
+            return newPacket.Substring(3, 3);
+        }
     }
 }

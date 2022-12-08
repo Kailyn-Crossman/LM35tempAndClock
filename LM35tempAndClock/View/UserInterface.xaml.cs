@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using LM35tempAndClock.Model;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using System.IO.Ports;
 using System.Net.Sockets;
@@ -22,7 +23,6 @@ public partial class UserInterface
     [ObservableProperty]
     bool bPortOpen;
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(serialOpenClosed))]
     bool buttonPressed = false;
 
     [ObservableProperty]
@@ -34,7 +34,9 @@ public partial class UserInterface
     [ObservableProperty]
     string lblOpenClose = "Open";
     [ObservableProperty]
-    string footBug;
+    string lblBug;
+
+    public TempData tempData { get; set; } = new TempData();
 
     SerialPort serialPort = new SerialPort();
     StringBuilder stringBuilderSend = new StringBuilder("###1111196");
@@ -52,11 +54,14 @@ public partial class UserInterface
 
     private void UserInterface_Loaded(object sender, EventArgs e)
     {
-            serialOpenClosed();
-        serialPort.BaudRate = 115200;
-        serialPort.ReceivedBytesThreshold = 1;
-        serialPort.DataReceived += SerialPort_DataReceived;
-        //lblBug.Text = "You Made it!";
+        debug.Text = tempData.FootBug;
+        tempData.PropertyChanged += TempData_PropertyChanged;
+ 
+    }
+
+    private void TempData_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+
     }
 
 
@@ -69,69 +74,68 @@ public partial class UserInterface
 
     private void MyMainThreadCode()
     {
+        //int calChkSum = 0;
+        //if (newPacket.Length > 37)
+        //{
 
-        int calChkSum = 0;
-        if (newPacket.Length > 37)
-        {
+        //    if (newPacket.Substring(0, 3) == "###")
+        //    {
+        //        newPacketNumber = Convert.ToInt32(newPacket.Substring(3, 3));
 
-            if (newPacket.Substring(0, 3) == "###")
-            {
-                newPacketNumber = Convert.ToInt32(newPacket.Substring(3, 3));
+        //        if (oldPacketNumber > -1)
+        //        {
+        //            if (newPacketNumber < oldPacketNumber)
+        //            {
+        //                packetRollover++;
+        //                if (oldPacketNumber != 999)
+        //                {
+        //                    lostPacketCount += 999 - oldPacketNumber + newPacketNumber;
+        //                }
+        //            }
+        //            else
+        //            {
+        //                if (newPacketNumber != oldPacketNumber + 1)
+        //                {
+        //                    lostPacketCount += newPacketNumber - oldPacketNumber;
+        //                }
+        //            }
+        //        }
+        //        for (int i = 3; i < 34; i++)
+        //        {
+        //            calChkSum += (byte)newPacket[i];
+        //        }
+        //        calChkSum %= 1000;
+        //        int recChkSum = Convert.ToInt32(newPacket.Substring(34, 3));
+        //        if (recChkSum == calChkSum)
+        //        {
+        //            Temperature(newPacket);
+        //            HighSensor(lmClass.avgAnalogValue(newPacket, 0));
+        //            oldPacketNumber = newPacketNumber;
+        //        }
+        //        else
+        //        {
+        //            chkSumError++;
+        //        }
 
-                if (oldPacketNumber > -1)
-                {
-                    if (newPacketNumber < oldPacketNumber)
-                    {
-                        packetRollover++;
-                        if (oldPacketNumber != 999)
-                        {
-                            lostPacketCount += 999 - oldPacketNumber + newPacketNumber;
-                        }
-                    }
-                    else
-                    {
-                        if (newPacketNumber != oldPacketNumber + 1)
-                        {
-                            lostPacketCount += newPacketNumber - oldPacketNumber;
-                        }
-                    }
-                }
-                for (int i = 3; i < 34; i++)
-                {
-                    calChkSum += (byte)newPacket[i];
-                }
-                calChkSum %= 1000;
-                int recChkSum = Convert.ToInt32(newPacket.Substring(34, 3));
-                if (recChkSum == calChkSum)
-                {
-                    Temperature(newPacket);
-                    HighSensor(lmClass.avgAnalogValue(newPacket, 0));
-                    oldPacketNumber = newPacketNumber;
-                }
-                else
-                {
-                    chkSumError++;
-                }
+        //        string parsedData = $"{newPacket.Length,-14}" +
+        //                           $"{newPacket.Substring(0, 3),-14}" +
+        //                           $"{newPacket.Substring(3, 3),-14}" +
+        //                           $"{newPacket.Substring(6, 4),-14}" +
+        //                           $"{newPacket.Substring(10, 4),-14}" +
+        //                           $"{newPacket.Substring(14, 4),-14}" +
+        //                           $"{newPacket.Substring(18, 4),-14}" +
+        //                           $"{newPacket.Substring(22, 4),-14}" +
+        //                           $"{newPacket.Substring(26, 4),-14}" +
+        //                           $"{newPacket.Substring(30, 4),-14}" +
+        //                           $"{newPacket.Substring(34, 3),-17}" +
+        //                           $"{calChkSum,-19}" +
+        //                           $"{lostPacketCount,-11}" +
+        //                           $"{chkSumError,-14}" +
+        //                           $"{packetRollover,-14}\r\n";
 
-                string parsedData = $"{newPacket.Length,-14}" +
-                                   $"{newPacket.Substring(0, 3),-14}" +
-                                   $"{newPacket.Substring(3, 3),-14}" +
-                                   $"{newPacket.Substring(6, 4),-14}" +
-                                   $"{newPacket.Substring(10, 4),-14}" +
-                                   $"{newPacket.Substring(14, 4),-14}" +
-                                   $"{newPacket.Substring(18, 4),-14}" +
-                                   $"{newPacket.Substring(22, 4),-14}" +
-                                   $"{newPacket.Substring(26, 4),-14}" +
-                                   $"{newPacket.Substring(30, 4),-14}" +
-                                   $"{newPacket.Substring(34, 3),-17}" +
-                                   $"{calChkSum,-19}" +
-                                   $"{lostPacketCount,-11}" +
-                                   $"{chkSumError,-14}" +
-                                   $"{packetRollover,-14}\r\n";
+        //    }
 
-            }
-
-        }
+        //}
     }
 
     private void Temperature(string validPacket)
@@ -167,14 +171,14 @@ public partial class UserInterface
             serialPort.Open();
             LblOpenClose = "Close";
             bPortOpen = true;
-            lblBug.Text = "Open";
+            LblBug = "Open";
         }
         else
         {
             serialPort.Close();
             LblOpenClose = "Open";
             bPortOpen = false;
-            lblBug.Text = "Close";
+            LblBug = "Close";
         }
     }
 

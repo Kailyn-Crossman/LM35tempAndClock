@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="LM35tempAndClock.View.UserInterface"
-             Title="Temperature">
+             Title="Temperature" >
 
     <HorizontalStackLayout
         Spacing="25"
@@ -11,11 +11,11 @@
 
         <VerticalStackLayout>
             <HorizontalStackLayout>
-                <Button
+                <!--<Button
                     x:Name="btnOpenClose"
                     Text="{Binding LblOpenClose}"
                     SemanticProperties.Hint="Open com port"
-                    Command="{Binding OpenCloseCommand}"/>
+                    Command="{Binding OpenCloseCommand}"/>-->
                 <Picker
                     x:Name="portPicker"
                     Title="Select ComPort"
@@ -59,8 +59,10 @@
                     MinimumWidthRequest="100"/>
             </HorizontalStackLayout>
             <Label
-                x:Name="lblBug"
-                Text="debugging"/>
+                x:Name="Bug"
+                Text="{Binding tempData.FootBug}"/>
+            <Label x:Name="debug"
+                   Text="magic"/>
         </VerticalStackLayout>
         
     </HorizontalStackLayout>

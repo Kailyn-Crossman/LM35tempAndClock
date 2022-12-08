@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using LM35tempAndClock.Model;
 using Microsoft.UI.Composition;
 
 namespace LM35tempAndClock.ViewModel
@@ -37,7 +38,9 @@ namespace LM35tempAndClock.ViewModel
         [ObservableProperty]
         string footBug;
 
-        string[] ports; 
+        string[] ports;
+
+        public TempData tempData { get; set; } = new TempData();
 
         SerialPort serialPort = new SerialPort();
 
@@ -47,16 +50,17 @@ namespace LM35tempAndClock.ViewModel
             ItemsSource = ports;
             SelectedIndex = ports.Length;
 
+
             serialPort.BaudRate = 115200;
             serialPort.ReceivedBytesThreshold = 1;
             serialPort.DataReceived += SerialPort_DataReceived;
         }
 
-         
 
 
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
+            tempData.FootBug = "im here";
             newPacket = serialPort.ReadLine();
             MainThread.BeginInvokeOnMainThread(MyMainThreadCode);
         }
@@ -98,8 +102,9 @@ namespace LM35tempAndClock.ViewModel
                     int recChkSum = Convert.ToInt32(newPacket.Substring(34, 3));
                     if (recChkSum == calChkSum)
                     {
+
                         //Temperature(newPacket);
-                     //   HighSensor(lmClass.avgAnalogValue(newPacket, 0));
+                        //   HighSensor(lmClass.avgAnalogValue(newPacket, 0));
                         oldPacketNumber = newPacketNumber;
                     }
                     else

@@ -3,10 +3,12 @@
     x:Class="LM35tempAndClock.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:viewmodels="clr-namespace:LM35tempAndClock.ViewModel"
     xmlns:local="clr-namespace:LM35tempAndClock.View"
     Shell.FlyoutBehavior="Flyout"
-    x:DataType="viewmodels:MainViewModel">
+    xmlns:viewmodels="clr-namespace:LM35tempAndClock.ViewModel"
+    x:DataType="viewmodels:MainViewModel"
+    >
+    
     <Shell.BindingContext>
         <viewmodels:MainViewModel/>
     </Shell.BindingContext>
@@ -38,8 +40,7 @@
                     SelectedItem="{Binding SelectedItem}"/>
                 <Label
                     x:Name="something"
-                    Text="{Binding FootBug}"
-                    />
+                    Text="{Binding tempData.FootBug}"/>
 
             </HorizontalStackLayout>
         </Grid>
