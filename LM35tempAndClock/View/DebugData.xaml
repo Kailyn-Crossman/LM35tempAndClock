@@ -18,7 +18,10 @@
                 <Picker
                     x:Name="portPicker"
                     Title="Select ComPort"
-                    HorizontalOptions="Center"/>
+                    HorizontalOptions="Center"
+                    ItemsSource="{Binding ItemsSource}"
+                    SelectedIndex="{Binding SelectedIndex}"
+                    SelectedItem="{Binding SelectedItem}"/>
             </HorizontalStackLayout>
             <HorizontalStackLayout>
                 <Label

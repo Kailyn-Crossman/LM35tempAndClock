@@ -25,16 +25,18 @@
             <HorizontalStackLayout>
                 <Button
                     x:Name="btnOpenClose"
-                    Text="Open"
-                    SemanticProperties.Hint="Open com port"/>
+                    Text="{Binding LblOpenClose}"
+                    SemanticProperties.Hint="Open com port"
+                    Command="{Binding OpenCloseCommand}"/>
 
-                    <Picker
+                <Picker
                     x:Name="portPicker"
                     Title="Select ComPort"
                     HorizontalOptions="Center"
                     ItemsSource="{Binding ItemsSource}"
-                    SelectedIndex="{Binding SelectedIndex}"/>
-                
+                    SelectedIndex="{Binding SelectedIndex}"
+                    SelectedItem="{Binding SelectedItem}"/>
+
             </HorizontalStackLayout>
         </Grid>
     </Shell.FlyoutFooter>

@@ -1,3 +1,4 @@
+using CommunityToolkit.Mvvm.ComponentModel;
 using System.IO.Ports;
 using System.Net.Sockets;
 using System.Text;
@@ -5,7 +6,8 @@ using Windows.Devices.Enumeration;
 
 namespace LM35tempAndClock.View;
 
-public partial class DebugData : ContentPage
+[ObservableObject]
+public partial class DebugData
 { 
     private bool bPortOpen = false;
     private string newPacket = "";
@@ -14,6 +16,15 @@ public partial class DebugData : ContentPage
     private int lostPacketCount = 0;
     private int packetRollover = 0;
     private int chkSumError = 0;
+
+    [ObservableProperty]
+    string[] itemsSource;
+    [ObservableProperty]
+    int selectedIndex;
+    [ObservableProperty]
+    object selectedItem;
+    [ObservableProperty]
+    string lblOpenClose = "Open";
 
     SerialPort serialPort = new SerialPort();
     StringBuilder stringBuilderSend = new StringBuilder("###1111196");
@@ -24,8 +35,8 @@ public partial class DebugData : ContentPage
 		InitializeComponent();
 
         string[] ports = SerialPort.GetPortNames();
-        portPicker.ItemsSource = ports;
-        portPicker.SelectedIndex = ports.Length;
+        ItemsSource = ports;
+        SelectedIndex = ports.Length;
         Loaded += MainPage_Loaded;
     }
 

@@ -13,13 +13,16 @@
             <HorizontalStackLayout>
                 <Button
                     x:Name="btnOpenClose"
-                    Text="Open"
+                    Text="{Binding LblOpenClose}"
                     SemanticProperties.Hint="Open com port"
-                    Clicked="btnOpenClose_Clicked"/>
+                    Command="{Binding OpenCloseCommand}"/>
                 <Picker
                     x:Name="portPicker"
                     Title="Select ComPort"
-                    HorizontalOptions="Center"/>
+                    HorizontalOptions="Center"
+                    ItemsSource="{Binding ItemsSource}"
+                    SelectedIndex="{Binding SelectedIndex}"
+                    SelectedItem="{Binding SelectedItem}"/>
             </HorizontalStackLayout>
             <HorizontalStackLayout>
                 <ImageButton

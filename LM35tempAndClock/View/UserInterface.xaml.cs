@@ -1,3 +1,6 @@
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.UI.Xaml.Controls.Primitives;
 using System.IO.Ports;
 using System.Net.Sockets;
 using System.Text;
@@ -5,7 +8,8 @@ using Windows.Devices.Enumeration;
 
 namespace LM35tempAndClock.View;
 
-public partial class UserInterface : ContentPage
+[ObservableObject]
+public partial class UserInterface
 {
     private bool bPortOpen = false;
     private string newPacket = "";
@@ -14,6 +18,15 @@ public partial class UserInterface : ContentPage
     private int lostPacketCount = 0;
     private int packetRollover = 0;
     private int chkSumError = 0;
+
+    [ObservableProperty]
+    string[] itemsSource;
+    [ObservableProperty]
+    int selectedIndex;
+    [ObservableProperty]
+    object selectedItem;
+    [ObservableProperty]
+    string lblOpenClose = "Open";
 
     SerialPort serialPort = new SerialPort();
     StringBuilder stringBuilderSend = new StringBuilder("###1111196");
@@ -24,8 +37,8 @@ public partial class UserInterface : ContentPage
         InitializeComponent();
 
         string[] ports = SerialPort.GetPortNames();
-        portPicker.ItemsSource = ports;
-        portPicker.SelectedIndex = ports.Length;
+        ItemsSource = ports;
+        SelectedIndex = ports.Length;
         Loaded += MainPage_Loaded;
     }
 
@@ -133,22 +146,41 @@ public partial class UserInterface : ContentPage
         }
         sendPacket();
     }
-    private void btnOpenClose_Clicked(object sender, EventArgs e)
+
+    [RelayCommand]
+    void OpenClose()
     {
         if (!bPortOpen)
         {
-            serialPort.PortName = portPicker.SelectedItem.ToString();
+            serialPort.PortName = SelectedItem.ToString();
             serialPort.Open();
-            btnOpenClose.Text = "Close";
+            LblOpenClose = "Close";
             bPortOpen = true;
         }
         else
         {
             serialPort.Close();
-            btnOpenClose.Text = "Open";
+            LblOpenClose = "Open";
             bPortOpen = false;
         }
+
     }
+    //private void btnOpenClose_Clicked(object sender, EventArgs e)
+    //{
+    //    if (!bPortOpen)
+    //    {
+    //        serialPort.PortName = portPicker.SelectedItem.ToString();
+    //        serialPort.Open();
+    //        btnOpenClose.Text = "Close";
+    //        bPortOpen = true;
+    //    }
+    //    else
+    //    {
+    //        serialPort.Close();
+    //        btnOpenClose.Text = "Open";
+    //        bPortOpen = false;
+    //    }
+    //}
 
     private async void btnSend_Clicked(object sender, EventArgs e)
     {
