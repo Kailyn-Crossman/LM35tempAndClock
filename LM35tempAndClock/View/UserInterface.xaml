@@ -35,6 +35,7 @@
             </HorizontalStackLayout>
             <VerticalStackLayout>
                     <Entry
+                    IsVisible="false"    
                     x:Name="entrySend"
                     HorizontalOptions="Center"/>
             </VerticalStackLayout>
