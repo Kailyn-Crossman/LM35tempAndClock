@@ -11,13 +11,19 @@ namespace LM35tempAndClock.View;
 [ObservableObject]
 public partial class UserInterface
 {
-    private bool bPortOpen = false;
+    
     private string newPacket = "";
     private int oldPacketNumber = -1;
     private int newPacketNumber = 0;
     private int lostPacketCount = 0;
     private int packetRollover = 0;
     private int chkSumError = 0;
+
+    [ObservableProperty]
+    bool bPortOpen;
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(serialOpenClosed))]
+    bool buttonPressed = false;
 
     [ObservableProperty]
     string[] itemsSource;
@@ -27,6 +33,8 @@ public partial class UserInterface
     object selectedItem;
     [ObservableProperty]
     string lblOpenClose = "Open";
+    [ObservableProperty]
+    string footBug;
 
     SerialPort serialPort = new SerialPort();
     StringBuilder stringBuilderSend = new StringBuilder("###1111196");
@@ -39,21 +47,24 @@ public partial class UserInterface
         string[] ports = SerialPort.GetPortNames();
         ItemsSource = ports;
         SelectedIndex = ports.Length;
-        Loaded += MainPage_Loaded;
+        Loaded += UserInterface_Loaded;
     }
 
-    private void MainPage_Loaded(object sender, EventArgs e)
+    private void UserInterface_Loaded(object sender, EventArgs e)
     {
+            serialOpenClosed();
         serialPort.BaudRate = 115200;
         serialPort.ReceivedBytesThreshold = 1;
         serialPort.DataReceived += SerialPort_DataReceived;
-
+        //lblBug.Text = "You Made it!";
     }
+
 
     private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
     {
         newPacket = serialPort.ReadLine();
         MainThread.BeginInvokeOnMainThread(MyMainThreadCode);
+       // lblBug.Text = "You made it!";
     }
 
     private void MyMainThreadCode()
@@ -147,40 +158,25 @@ public partial class UserInterface
         sendPacket();
     }
 
-    [RelayCommand]
-    void OpenClose()
+
+    private void serialOpenClosed()
     {
-        if (!bPortOpen)
+        if (!bPortOpen && buttonPressed)
         {
             serialPort.PortName = SelectedItem.ToString();
             serialPort.Open();
             LblOpenClose = "Close";
             bPortOpen = true;
+            lblBug.Text = "Open";
         }
         else
         {
             serialPort.Close();
             LblOpenClose = "Open";
             bPortOpen = false;
+            lblBug.Text = "Close";
         }
-
     }
-    //private void btnOpenClose_Clicked(object sender, EventArgs e)
-    //{
-    //    if (!bPortOpen)
-    //    {
-    //        serialPort.PortName = portPicker.SelectedItem.ToString();
-    //        serialPort.Open();
-    //        btnOpenClose.Text = "Close";
-    //        bPortOpen = true;
-    //    }
-    //    else
-    //    {
-    //        serialPort.Close();
-    //        btnOpenClose.Text = "Open";
-    //        bPortOpen = false;
-    //    }
-    //}
 
     private async void btnSend_Clicked(object sender, EventArgs e)
     {

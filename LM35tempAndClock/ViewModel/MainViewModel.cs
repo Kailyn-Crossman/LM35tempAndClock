@@ -13,13 +13,18 @@ namespace LM35tempAndClock.ViewModel
     [ObservableObject]
     public partial class MainViewModel
     {
-        private bool bPortOpen = false;
+        
         string newPacket = "";
         private int oldPacketNumber = -1;
         private int newPacketNumber = 0;
         private int lostPacketCount = 0;
         private int packetRollover = 0;
         private int chkSumError = 0;
+
+        [ObservableProperty]
+        bool bPortOpen = false;
+        [ObservableProperty]
+        bool buttonPressed = false;
 
         [ObservableProperty]
         string[] itemsSource;
@@ -29,6 +34,8 @@ namespace LM35tempAndClock.ViewModel
         object selectedItem;
         [ObservableProperty]
         string lblOpenClose = "Open";
+        [ObservableProperty]
+        string footBug;
 
         string[] ports; 
 
@@ -126,12 +133,20 @@ namespace LM35tempAndClock.ViewModel
         [RelayCommand]
         void OpenClose()
         {
-            if (!bPortOpen)
+            if (!buttonPressed)
+            {
+                buttonPressed = true;
+            } else if (buttonPressed)
+            {
+                buttonPressed = false;
+            }
+            if (!bPortOpen && buttonPressed)
             {
                 serialPort.PortName = SelectedItem.ToString();
                 serialPort.Open();
                 LblOpenClose = "Close";
                 bPortOpen = true;
+                
             }
             else
             {

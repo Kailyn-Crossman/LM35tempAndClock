@@ -28,7 +28,7 @@
                     Text="{Binding LblOpenClose}"
                     SemanticProperties.Hint="Open com port"
                     Command="{Binding OpenCloseCommand}"/>
-
+                
                 <Picker
                     x:Name="portPicker"
                     Title="Select ComPort"
@@ -36,6 +36,10 @@
                     ItemsSource="{Binding ItemsSource}"
                     SelectedIndex="{Binding SelectedIndex}"
                     SelectedItem="{Binding SelectedItem}"/>
+                <Label
+                    x:Name="something"
+                    Text="{Binding FootBug}"
+                    />
 
             </HorizontalStackLayout>
         </Grid>

@@ -58,6 +58,9 @@
                     x:Name="labelWarning"
                     MinimumWidthRequest="100"/>
             </HorizontalStackLayout>
+            <Label
+                x:Name="lblBug"
+                Text="debugging"/>
         </VerticalStackLayout>
         
     </HorizontalStackLayout>
