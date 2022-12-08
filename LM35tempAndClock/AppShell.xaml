@@ -14,11 +14,11 @@
     <FlyoutItem Title="Temperature Data">
         <ShellContent
         Title="Home"
-        ContentTemplate="{DataTemplate local:View.UserInterface}"/>
+        ContentTemplate="{DataTemplate local:UserInterface}"/>
     </FlyoutItem>
     <FlyoutItem Title="Debug Data">
         <ShellContent
-            ContentTemplate="{DataTemplate local:View.DebugData}"/>
+            ContentTemplate="{DataTemplate local:DebugData}"/>
     </FlyoutItem>
     <Shell.FlyoutFooter>
         <Grid HeightRequest="100" BackgroundColor="DarkSlateBlue">
@@ -26,12 +26,15 @@
                 <Button
                     x:Name="btnOpenClose"
                     Text="Open"
-                    SemanticProperties.Hint="Open com port"
-                    Command="{Binding OpenCloseCommand}"/>
-                <Picker
+                    SemanticProperties.Hint="Open com port"/>
+
+                    <Picker
                     x:Name="portPicker"
                     Title="Select ComPort"
-                    HorizontalOptions="Center"/>
+                    HorizontalOptions="Center"
+                    ItemsSource="{Binding ItemsSource}"
+                    SelectedIndex="{Binding SelectedIndex}"/>
+                
             </HorizontalStackLayout>
         </Grid>
     </Shell.FlyoutFooter>
