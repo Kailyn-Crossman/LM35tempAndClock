@@ -12,7 +12,7 @@
             <HorizontalStackLayout>
                 <Picker
                     x:Name="portPicker"
-                    Title="Select ComPort"
+                    Title="Selected ComPort"
                     HorizontalOptions="Center"
                     ItemsSource="{Binding ItemsSource}"
                     SelectedIndex="{Binding SelectedIndex}"
@@ -20,22 +20,7 @@
             </HorizontalStackLayout>
         </VerticalStackLayout>
         <VerticalStackLayout>
-            <HorizontalStackLayout>
-                <Label
-                    Text="Recieved Packet History"
-                    HorizontalOptions="Center"/>
-                <CheckBox
-                    x:Name="checkBoxHistory"
-                    IsChecked="False"
-                    HorizontalOptions="Center"/>
-                <Label
-                    Padding="100,0,0,0"
-                    Text="Parsed Packet History"/>
-                <CheckBox
-                    x:Name="checkBoxParseHistory"
-                    IsChecked="False"
-                    HorizontalOptions="Center"/>
-            </HorizontalStackLayout>
+
             <Label
                 Text="Received Packet"/>
             <ScrollView

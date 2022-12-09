@@ -59,7 +59,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="View\NewGraph.xaml.cs">
+	    <DependentUpon>NewGraph.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
 	  <MauiXaml Update="View\DebugData.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\NewGraph.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\UserInterface.xaml">

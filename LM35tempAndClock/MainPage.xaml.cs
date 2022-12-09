@@ -90,7 +90,7 @@ public partial class MainPage : ContentPage
                 if (recChkSum == calChkSum)
                 {
                     Temperature(newPacket);
-                    HighSensor(lmClass.avgAnalogValue(newPacket, 0));
+                    HighSensor(lmClass.analogValue(newPacket, 0));
                     oldPacketNumber = newPacketNumber;
                 }
                 else
@@ -129,7 +129,7 @@ public partial class MainPage : ContentPage
 
     private void Temperature(string validPacket)
     {
-        double temperature = lmClass.GetTemperature(lmClass.avgAnalogValue(validPacket, 0));
+        double temperature = lmClass.GetTemperature(lmClass.analogValue(validPacket, 0));
         labelTemperature.Text = temperature.ToString("  00.0") + " °C";
     }
 

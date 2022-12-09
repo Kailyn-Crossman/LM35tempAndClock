@@ -22,6 +22,10 @@
         <ShellContent
             ContentTemplate="{DataTemplate local:DebugData}"/>
     </FlyoutItem>
+    <FlyoutItem Title="Graph View">
+        <ShellContent
+            ContentTemplate="{DataTemplate local:GraphView}"/>
+    </FlyoutItem>
     <Shell.FlyoutFooter>
         <Grid HeightRequest="100" BackgroundColor="DarkSlateBlue">
             <HorizontalStackLayout>
@@ -30,17 +34,33 @@
                     Text="{Binding LblOpenClose}"
                     SemanticProperties.Hint="Open com port"
                     Command="{Binding OpenCloseCommand}"/>
-                
                 <Picker
                     x:Name="portPicker"
                     Title="Select ComPort"
                     HorizontalOptions="Center"
                     ItemsSource="{Binding ItemsSource}"
                     SelectedIndex="{Binding SelectedIndex}"
-                    SelectedItem="{Binding SelectedItem}"/>
+                    SelectedItem="{Binding SelectedItem}"
+                    MaximumWidthRequest="100"/>
+                <VerticalStackLayout>
                 <Label
                     x:Name="something"
                     Text="{Binding tempData.FootBug}"/>
+                    <HorizontalStackLayout>
+                        <CheckBox
+                    x:Name="checkBoxHistory"
+                    IsChecked="{Binding RPHistory}"/>
+                        <Label
+                        Text="dBugRXHistory"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout>
+                        <CheckBox
+                    x:Name="parsedBoxHistory"
+                    IsChecked="{Binding PPHistory}"/>
+                        <Label
+                        Text="dBugParseHistory"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
 
             </HorizontalStackLayout>
         </Grid>

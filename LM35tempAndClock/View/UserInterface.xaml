@@ -18,7 +18,7 @@
                     Command="{Binding OpenCloseCommand}"/>-->
                 <Picker
                     x:Name="portPicker"
-                    Title="Select ComPort"
+                    Title="Selected ComPort"
                     HorizontalOptions="Center"
                     ItemsSource="{Binding ItemsSource}"
                     SelectedIndex="{Binding SelectedIndex}"
@@ -27,12 +27,7 @@
             <HorizontalStackLayout>
                 <ImageButton
                     x:Name="imgLED1"
-                    Source="ledoff.png"
-                    HeightRequest="200"
-                    WidthRequest="100"/>
-                <ImageButton
-                    x:Name="imgLED2"
-                    Source="ledoff.png"
+                    Source="{Binding Led1}"
                     HeightRequest="200"
                     WidthRequest="100"/>
             </HorizontalStackLayout>
@@ -46,10 +41,18 @@
         <VerticalStackLayout>
             <HorizontalStackLayout>
                 <Label
-                    Text="Temperature"/>
+                    Text="Temperature1"/>
                 <Label
-                    x:Name="labelTemperature"
-                    Text="{Binding LblTemperature}"
+                    x:Name="labelTemperature0"
+                    Text="{Binding tempData.LblTemperature0}"
+                    MinimumWidthRequest="100"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout>
+                <Label
+                    Text="Temperature2"/>
+                <Label
+                    x:Name="labelTemperature1"
+                    Text="{Binding tempData.LblTemperature1}"
                     MinimumWidthRequest="100"/>
             </HorizontalStackLayout>
             <HorizontalStackLayout>

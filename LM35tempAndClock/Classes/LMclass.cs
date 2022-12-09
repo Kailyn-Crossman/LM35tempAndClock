@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -11,23 +12,19 @@ namespace LM35tempAndClock.Classes
     [ObservableObject]
     public partial class LMclass
     {
-
-        public double avgAnalogValue(string newPacket, int indexOfAnalog)
+        public double analogValue(string newPacket, int indexOfAnalog)
         {
-            string[] voltage;
-            double voltageReading = 0;
-            voltage = new string[5];
-            for (int i = 0; i < 20; i++)
-            {
+            string[] analog;
+            double analogReading = 0;
+            analog = new string[5];
+
                 for (int e = 0; e < 5; e++)
                 {
                     //Read Pin
-                    voltage[e] = $"{newPacket.Substring(6 + e * 4, 4)}";
+                    analog[e] = $"{newPacket.Substring(6 + e * 4, 4)}";
                 }
-                voltageReading += Convert.ToInt32(voltage[indexOfAnalog]);
-            }
-            voltageReading = voltageReading / 20;
-            return voltageReading;
+                analogReading += Convert.ToInt32(analog[indexOfAnalog]);
+            return analogReading;
         }
 
         public double GetTemperature(double voltage)

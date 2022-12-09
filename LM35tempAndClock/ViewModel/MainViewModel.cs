@@ -21,6 +21,7 @@ namespace LM35tempAndClock.ViewModel
         private int lostPacketCount = 0;
         private int packetRollover = 0;
         private int chkSumError = 0;
+        string hereParsedData;
 
         [ObservableProperty]
         bool bPortOpen = false;
@@ -41,10 +42,15 @@ namespace LM35tempAndClock.ViewModel
         string footBug;
 
         [ObservableProperty]
-        string lblTemperature;
-        [ObservableProperty]
         string lblWarning;
+        [ObservableProperty]
+        string led1 = "ledoff.png";
 
+
+        [ObservableProperty]
+        bool rPHistory;
+        [ObservableProperty]
+        bool pPHistory;
         [ObservableProperty]
         string parsedData;
         [ObservableProperty]
@@ -80,7 +86,7 @@ namespace LM35tempAndClock.ViewModel
 
         private void MyMainThreadCode()
         {
-            if (tempData.CBHistory.IsChecked == true)
+            if (RPHistory == true)
             {
                 ReceivedData = NewPacket + ReceivedData;
             }
@@ -123,9 +129,9 @@ namespace LM35tempAndClock.ViewModel
                     int recChkSum = Convert.ToInt32(NewPacket.Substring(34, 3));
                     if (recChkSum == calChkSum)
                     {
-                        tempData.FootBug = NewPacket;
+                       // tempData.FootBug = NewPacket;
                         Temperature(NewPacket);
-                        HighSensor(lmClass.avgAnalogValue(NewPacket, 0));
+                        HighSensor(lmClass.analogValue(NewPacket, 0));
                         oldPacketNumber = newPacketNumber;
                     }
                     else
@@ -133,7 +139,7 @@ namespace LM35tempAndClock.ViewModel
                         chkSumError++;
                     }
 
-                    ParsedData = $"{NewPacket.Length,-14}" +
+                    hereParsedData = $"{NewPacket.Length,-14}" +
                                        $"{NewPacket.Substring(0, 3),-14}" +
                                        $"{NewPacket.Substring(3, 3),-14}" +
                                        $"{NewPacket.Substring(6, 4),-14}" +
@@ -148,7 +154,16 @@ namespace LM35tempAndClock.ViewModel
                                        $"{lostPacketCount,-11}" +
                                        $"{chkSumError,-14}" +
                                        $"{packetRollover,-14}\r\n";
-                
+
+                    if (PPHistory == true)
+                    {
+                        ParsedData = hereParsedData + ParsedData;
+                    }
+                    else
+                    {
+                        ParsedData = hereParsedData;
+                    }
+
                 }
 
             }
@@ -183,8 +198,10 @@ namespace LM35tempAndClock.ViewModel
 
         private void Temperature(string validPacket)
         {
-            double temperature = lmClass.GetTemperature(lmClass.avgAnalogValue(validPacket, 0));
-            LblTemperature = temperature.ToString("  00.0") + " °C";
+            double temperature0 = lmClass.GetTemperature(lmClass.analogValue(validPacket, 0));
+            double temperature1 = lmClass.GetTemperature(lmClass.analogValue(validPacket, 1));
+            tempData.LblTemperature0 = temperature0.ToString("  00.0") + " °C";
+            tempData.LblTemperature1 = temperature1.ToString("  00.0") + " °C";
         }
 
         public void HighSensor(double voltage)
@@ -193,11 +210,14 @@ namespace LM35tempAndClock.ViewModel
             if (temperature > 25)
             {
                 stringBuilderSend[3] = '0';
+                Led1 = "ledon.png";
                 LblWarning = "  To Hot!";
+
             }
             else if (temperature < 24.7)
             {
                 stringBuilderSend[3] = '1';
+                Led1 = "ledoff.png";
                 LblWarning = "  Okay";
             }
             sendPacket();
