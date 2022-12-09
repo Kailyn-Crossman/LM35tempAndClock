@@ -13,9 +13,12 @@ namespace LM35tempAndClock.Model
         [ObservableProperty]
         string footBug;
 
+        [ObservableProperty]
+        CheckBox cBHistory = new CheckBox();
+
         public TempData()
         {
-            FootBug = "things";
+
         }
         public void parsePacket(string newPacket)
         {

@@ -17,7 +17,7 @@ namespace LM35tempAndClock.Classes
             string[] voltage;
             double voltageReading = 0;
             voltage = new string[5];
-            for (int i = 0; i < 7; i++)
+            for (int i = 0; i < 20; i++)
             {
                 for (int e = 0; e < 5; e++)
                 {
@@ -26,7 +26,7 @@ namespace LM35tempAndClock.Classes
                 }
                 voltageReading += Convert.ToInt32(voltage[indexOfAnalog]);
             }
-            voltageReading = voltageReading / 7;
+            voltageReading = voltageReading / 20;
             return voltageReading;
         }
 

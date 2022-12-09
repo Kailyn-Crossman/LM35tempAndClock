@@ -10,11 +10,6 @@
 
         <VerticalStackLayout>
             <HorizontalStackLayout>
-                <Button
-                    x:Name="btnOpenClose"
-                    Text="Open"
-                    SemanticProperties.Hint="Open com port"
-                    Clicked="btnOpenClose_Clicked"/>
                 <Picker
                     x:Name="portPicker"
                     Title="Select ComPort"
@@ -23,41 +18,15 @@
                     SelectedIndex="{Binding SelectedIndex}"
                     SelectedItem="{Binding SelectedItem}"/>
             </HorizontalStackLayout>
-            <HorizontalStackLayout>
-                <Label
-                    Text="Bits"
-                    FontSize="Medium"/>
-                <Button
-                    x:Name="btnBit0"
-                    Text="1"
-                    FontSize="Medium"
-                    Clicked="btnBit0_Clicked"/>
-                <Button
-                    x:Name="btnBit1"
-                    Text="1"
-                    FontSize="Medium"
-                    Clicked="btnBit1_Clicked"/>
-            </HorizontalStackLayout>
         </VerticalStackLayout>
         <VerticalStackLayout>
-            <HorizontalStackLayout>
-                <Button
-                    x:Name="btnSend"
-                    Text="Send"
-                    Clicked="btnSend_Clicked"
-                    HorizontalOptions="Center"/>
-                <Entry
-                    x:Name="entrySend"
-                    Text="###1111196"
-                    HorizontalOptions="Center"/>
-            </HorizontalStackLayout>
             <HorizontalStackLayout>
                 <Label
                     Text="Recieved Packet History"
                     HorizontalOptions="Center"/>
                 <CheckBox
                     x:Name="checkBoxHistory"
-                    IsChecked="False"
+                    IsChecked="{Binding tempData.CBHistory}"
                     HorizontalOptions="Center"/>
                 <Label
                     Padding="100,0,0,0"
@@ -75,7 +44,7 @@
                 VerticalOptions="StartAndExpand"/>
             <Label
                 x:Name="labelRXdata"
-                Text="Received Packet"
+                Text="{Binding ReceivedData}"
                 MinimumWidthRequest="310"/>
             <Label
                 Text="Parsed Packet"/>
@@ -92,7 +61,7 @@
                 VerticalOptions="StartAndExpand"/>
             <Label
                 x:Name="labelParsedData"
-                Text="Parsed Packet"
+                Text="{Binding ParsedData}"
                 MinimumWidthRequest="310"/>
 
         </VerticalStackLayout>

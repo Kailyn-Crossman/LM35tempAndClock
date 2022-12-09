@@ -16,7 +16,6 @@ namespace LM35tempAndClock.ViewModel
     public partial class MainViewModel
     {
         
-        string newPacket = "";
         private int oldPacketNumber = -1;
         private int newPacketNumber = 0;
         private int lostPacketCount = 0;
@@ -37,12 +36,20 @@ namespace LM35tempAndClock.ViewModel
         [ObservableProperty]
         string lblOpenClose = "Open";
         [ObservableProperty]
+        string newPacket = "";
+        [ObservableProperty]
         string footBug;
 
         [ObservableProperty]
         string lblTemperature;
         [ObservableProperty]
         string lblWarning;
+
+        [ObservableProperty]
+        string parsedData;
+        [ObservableProperty]
+        string receivedData;
+
 
         string[] ports;
 
@@ -65,7 +72,6 @@ namespace LM35tempAndClock.ViewModel
         }
 
 
-
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             newPacket = serialPort.ReadLine();
@@ -74,6 +80,14 @@ namespace LM35tempAndClock.ViewModel
 
         private void MyMainThreadCode()
         {
+            if (tempData.CBHistory.IsChecked == true)
+            {
+                ReceivedData = newPacket + ReceivedData;
+            }
+            else
+            {
+                ReceivedData = newPacket;
+            }
 
             int calChkSum = 0;
             if (newPacket.Length > 37)
@@ -119,7 +133,7 @@ namespace LM35tempAndClock.ViewModel
                         chkSumError++;
                     }
 
-                    string parsedData = $"{newPacket.Length,-14}" +
+                    ParsedData = $"{newPacket.Length,-14}" +
                                        $"{newPacket.Substring(0, 3),-14}" +
                                        $"{newPacket.Substring(3, 3),-14}" +
                                        $"{newPacket.Substring(6, 4),-14}" +
@@ -134,8 +148,6 @@ namespace LM35tempAndClock.ViewModel
                                        $"{lostPacketCount,-11}" +
                                        $"{chkSumError,-14}" +
                                        $"{packetRollover,-14}\r\n";
-
-                        //labelParsedData.Text = parsedData;
                 
                 }
 
