@@ -1,6 +1,7 @@
 ﻿using System.IO.Ports;
 using System.Net.Sockets;
 using System.Text;
+using LM35tempAndClock.Classes;
 using Windows.Devices.Enumeration;
 
 namespace LM35tempAndClock;

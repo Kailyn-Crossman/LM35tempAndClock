@@ -49,6 +49,7 @@
                     Text="Temperature"/>
                 <Label
                     x:Name="labelTemperature"
+                    Text="{Binding LblTemperature}"
                     MinimumWidthRequest="100"/>
             </HorizontalStackLayout>
             <HorizontalStackLayout>
@@ -56,13 +57,9 @@
                     Text="Danger Warning"/>
                 <Label
                     x:Name="labelWarning"
+                    Text="{Binding LblWarning}"
                     MinimumWidthRequest="100"/>
             </HorizontalStackLayout>
-            <Label
-                x:Name="Bug"
-                Text="{Binding tempData.FootBug}"/>
-            <Label x:Name="debug"
-                   Text="magic"/>
         </VerticalStackLayout>
         
     </HorizontalStackLayout>

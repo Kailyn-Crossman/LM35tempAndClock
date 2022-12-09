@@ -4,10 +4,12 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace LM35tempAndClock
+namespace LM35tempAndClock.Classes
 {
-    internal class LMclass
+    [ObservableObject]
+    public partial class LMclass
     {
 
         public double avgAnalogValue(string newPacket, int indexOfAnalog)
@@ -20,7 +22,7 @@ namespace LM35tempAndClock
                 for (int e = 0; e < 5; e++)
                 {
                     //Read Pin
-                    voltage[e] = $"{newPacket.Substring(6 + (e * 4), 4)}";
+                    voltage[e] = $"{newPacket.Substring(6 + e * 4, 4)}";
                 }
                 voltageReading += Convert.ToInt32(voltage[indexOfAnalog]);
             }
@@ -30,7 +32,7 @@ namespace LM35tempAndClock
 
         public double GetTemperature(double voltage)
         {
-            double temperature = (voltage / 10); 
+            double temperature = voltage / 10;
             return temperature;
         }
 

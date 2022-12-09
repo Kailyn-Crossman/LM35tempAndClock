@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using LM35tempAndClock.Classes;
 using System.IO.Ports;
 using System.Net.Sockets;
 using System.Text;

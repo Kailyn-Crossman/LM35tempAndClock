@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LM35tempAndClock.Model;
 using Microsoft.UI.Composition;
+using LM35tempAndClock.Classes;
 
 namespace LM35tempAndClock.ViewModel
 {
@@ -38,11 +39,18 @@ namespace LM35tempAndClock.ViewModel
         [ObservableProperty]
         string footBug;
 
+        [ObservableProperty]
+        string lblTemperature;
+        [ObservableProperty]
+        string lblWarning;
+
         string[] ports;
 
         public TempData tempData { get; set; } = new TempData();
+        public LMclass lmClass { get; set; } = new LMclass();
 
         SerialPort serialPort = new SerialPort();
+        StringBuilder stringBuilderSend = new StringBuilder("###1111196");
 
         public MainViewModel()
         {
@@ -60,7 +68,6 @@ namespace LM35tempAndClock.ViewModel
 
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            tempData.FootBug = "im here";
             newPacket = serialPort.ReadLine();
             MainThread.BeginInvokeOnMainThread(MyMainThreadCode);
         }
@@ -102,9 +109,9 @@ namespace LM35tempAndClock.ViewModel
                     int recChkSum = Convert.ToInt32(newPacket.Substring(34, 3));
                     if (recChkSum == calChkSum)
                     {
-
-                        //Temperature(newPacket);
-                        //   HighSensor(lmClass.avgAnalogValue(newPacket, 0));
+                        tempData.FootBug = newPacket;
+                        Temperature(newPacket);
+                        HighSensor(lmClass.avgAnalogValue(newPacket, 0));
                         oldPacketNumber = newPacketNumber;
                     }
                     else
@@ -158,6 +165,52 @@ namespace LM35tempAndClock.ViewModel
                 serialPort.Close();
                 LblOpenClose = "Open";
                 bPortOpen = false;
+            }
+
+        }
+
+        private void Temperature(string validPacket)
+        {
+            double temperature = lmClass.GetTemperature(lmClass.avgAnalogValue(validPacket, 0));
+            LblTemperature = temperature.ToString("  00.0") + " °C";
+        }
+
+        public void HighSensor(double voltage)
+        {
+            double temperature = (voltage / 10);
+            if (temperature > 25)
+            {
+                stringBuilderSend[3] = '0';
+                LblWarning = "  To Hot!";
+            }
+            else if (temperature < 24.7)
+            {
+                stringBuilderSend[3] = '1';
+                LblWarning = "  Okay";
+            }
+            sendPacket();
+        }
+
+        private void sendPacket()
+        {
+            int calSendChkSum = 0;
+            try
+            {
+                for (int i = 3; i < 7; i++)
+                {
+                    calSendChkSum += (byte)stringBuilderSend[i];
+                }
+                calSendChkSum %= 1000;
+                stringBuilderSend.Remove(7, 3);
+                stringBuilderSend.Insert(7, calSendChkSum.ToString());
+                string messageOut = stringBuilderSend.ToString();
+                messageOut += "\r\n";
+                byte[] messageBytes = Encoding.UTF8.GetBytes(messageOut);
+                serialPort.Write(messageBytes, 0, messageBytes.Length);
+            }
+            catch (Exception ex)
+            {
+               // DisplayAlert("Alert", ex.Message, "OK");
             }
 
         }
