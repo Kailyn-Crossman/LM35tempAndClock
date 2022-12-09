@@ -9,5 +9,4 @@ public partial class DebugData
     {
         InitializeComponent();
     }
-
 }

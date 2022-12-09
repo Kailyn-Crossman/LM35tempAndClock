@@ -82,20 +82,20 @@ namespace LM35tempAndClock.ViewModel
         {
             if (tempData.CBHistory.IsChecked == true)
             {
-                ReceivedData = newPacket + ReceivedData;
+                ReceivedData = NewPacket + ReceivedData;
             }
             else
             {
-                ReceivedData = newPacket;
+                ReceivedData = NewPacket;
             }
 
             int calChkSum = 0;
-            if (newPacket.Length > 37)
+            if (NewPacket.Length > 37)
             {
 
-                if (newPacket.Substring(0, 3) == "###")
+                if (NewPacket.Substring(0, 3) == "###")
                 {
-                    newPacketNumber = Convert.ToInt32(newPacket.Substring(3, 3));
+                    newPacketNumber = Convert.ToInt32(NewPacket.Substring(3, 3));
 
                     if (oldPacketNumber > -1)
                     {
@@ -117,15 +117,15 @@ namespace LM35tempAndClock.ViewModel
                     }
                     for (int i = 3; i < 34; i++)
                     {
-                        calChkSum += (byte)newPacket[i];
+                        calChkSum += (byte)NewPacket[i];
                     }
                     calChkSum %= 1000;
-                    int recChkSum = Convert.ToInt32(newPacket.Substring(34, 3));
+                    int recChkSum = Convert.ToInt32(NewPacket.Substring(34, 3));
                     if (recChkSum == calChkSum)
                     {
-                        tempData.FootBug = newPacket;
-                        Temperature(newPacket);
-                        HighSensor(lmClass.avgAnalogValue(newPacket, 0));
+                        tempData.FootBug = NewPacket;
+                        Temperature(NewPacket);
+                        HighSensor(lmClass.avgAnalogValue(NewPacket, 0));
                         oldPacketNumber = newPacketNumber;
                     }
                     else
@@ -133,17 +133,17 @@ namespace LM35tempAndClock.ViewModel
                         chkSumError++;
                     }
 
-                    ParsedData = $"{newPacket.Length,-14}" +
-                                       $"{newPacket.Substring(0, 3),-14}" +
-                                       $"{newPacket.Substring(3, 3),-14}" +
-                                       $"{newPacket.Substring(6, 4),-14}" +
-                                       $"{newPacket.Substring(10, 4),-14}" +
-                                       $"{newPacket.Substring(14, 4),-14}" +
-                                       $"{newPacket.Substring(18, 4),-14}" +
-                                       $"{newPacket.Substring(22, 4),-14}" +
-                                       $"{newPacket.Substring(26, 4),-14}" +
-                                       $"{newPacket.Substring(30, 4),-14}" +
-                                       $"{newPacket.Substring(34, 3),-17}" +
+                    ParsedData = $"{NewPacket.Length,-14}" +
+                                       $"{NewPacket.Substring(0, 3),-14}" +
+                                       $"{NewPacket.Substring(3, 3),-14}" +
+                                       $"{NewPacket.Substring(6, 4),-14}" +
+                                       $"{NewPacket.Substring(10, 4),-14}" +
+                                       $"{NewPacket.Substring(14, 4),-14}" +
+                                       $"{NewPacket.Substring(18, 4),-14}" +
+                                       $"{NewPacket.Substring(22, 4),-14}" +
+                                       $"{NewPacket.Substring(26, 4),-14}" +
+                                       $"{NewPacket.Substring(30, 4),-14}" +
+                                       $"{NewPacket.Substring(34, 3),-17}" +
                                        $"{calChkSum,-19}" +
                                        $"{lostPacketCount,-11}" +
                                        $"{chkSumError,-14}" +

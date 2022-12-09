@@ -26,7 +26,7 @@
                     HorizontalOptions="Center"/>
                 <CheckBox
                     x:Name="checkBoxHistory"
-                    IsChecked="{Binding tempData.CBHistory}"
+                    IsChecked="False"
                     HorizontalOptions="Center"/>
                 <Label
                     Padding="100,0,0,0"
