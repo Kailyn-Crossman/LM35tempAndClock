@@ -12,6 +12,7 @@ namespace LM35tempAndClock.Classes
     [ObservableObject]
     public partial class LMclass
     {
+        // Function to get the analog value from a specific pin
         public double analogValue(string newPacket, int indexOfAnalog)
         {
             string[] analog;
@@ -27,6 +28,7 @@ namespace LM35tempAndClock.Classes
             return analogReading;
         }
 
+        //Maths up the analog value and converts it to a temperature 
         public double GetTemperature(double voltage)
         {
             double temperature = voltage / 10;

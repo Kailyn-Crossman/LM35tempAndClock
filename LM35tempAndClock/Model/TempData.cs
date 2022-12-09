@@ -10,9 +10,11 @@ namespace LM35tempAndClock.Model
     [ObservableObject]
     public partial class TempData
     {
+        //debugging variable
         [ObservableProperty]
         string footBug;
 
+        //creates obserable variables that can be used anywhere in the project
         [ObservableProperty]
         string lblTemperature0;
         [ObservableProperty]
@@ -22,15 +24,6 @@ namespace LM35tempAndClock.Model
         {
 
 
-        }
-        public void parsePacket(string newPacket)
-        {
-
-        }
-
-        public string getPacketNumber(string newPacket)
-        {
-            return newPacket.Substring(3, 3);
         }
     }
 }

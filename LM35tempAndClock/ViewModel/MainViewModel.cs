@@ -59,7 +59,9 @@ namespace LM35tempAndClock.ViewModel
 
         string[] ports;
 
+        //sets up using variables from the TempData class
         public TempData tempData { get; set; } = new TempData();
+        //sets up using functions from LMclass
         public LMclass lmClass { get; set; } = new LMclass();
 
         SerialPort serialPort = new SerialPort();
@@ -68,6 +70,7 @@ namespace LM35tempAndClock.ViewModel
         public MainViewModel()
         {
             ports = SerialPort.GetPortNames();
+            //Sends the selected port through MVVM to the AppSheel.xaml
             ItemsSource = ports;
             SelectedIndex = ports.Length;
 
@@ -80,22 +83,27 @@ namespace LM35tempAndClock.ViewModel
 
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
+            //When the serial port receives data assign it to the newPacket variable
             newPacket = serialPort.ReadLine();
             MainThread.BeginInvokeOnMainThread(MyMainThreadCode);
         }
 
         private void MyMainThreadCode()
         {
+            //RPHistory is a checkbox linked from AppShell.xaml
             if (RPHistory == true)
             {
+                //if the checkbox is checked scroll the data
                 ReceivedData = NewPacket + ReceivedData;
             }
             else
             {
+                //if the checkbox is unchecked just how one line updating
                 ReceivedData = NewPacket;
             }
 
             int calChkSum = 0;
+            // check for a vaild packet
             if (NewPacket.Length > 37)
             {
 
@@ -127,9 +135,9 @@ namespace LM35tempAndClock.ViewModel
                     }
                     calChkSum %= 1000;
                     int recChkSum = Convert.ToInt32(NewPacket.Substring(34, 3));
+                    // if the packet is valid then
                     if (recChkSum == calChkSum)
                     {
-                       // tempData.FootBug = NewPacket;
                         Temperature(NewPacket);
                         HighSensor(lmClass.analogValue(NewPacket, 0));
                         oldPacketNumber = newPacketNumber;
@@ -138,7 +146,7 @@ namespace LM35tempAndClock.ViewModel
                     {
                         chkSumError++;
                     }
-
+                    // locally parse all the data
                     hereParsedData = $"{NewPacket.Length,-14}" +
                                        $"{NewPacket.Substring(0, 3),-14}" +
                                        $"{NewPacket.Substring(3, 3),-14}" +
@@ -157,10 +165,12 @@ namespace LM35tempAndClock.ViewModel
 
                     if (PPHistory == true)
                     {
+                        //send the parsed data to debug window and scroll
                         ParsedData = hereParsedData + ParsedData;
                     }
                     else
                     {
+                        //send the parsed data to debug window
                         ParsedData = hereParsedData;
                     }
 
@@ -169,6 +179,7 @@ namespace LM35tempAndClock.ViewModel
             }
 
         }
+        //When the button in the AppShell.xaml then
         [RelayCommand]
         void OpenClose()
         {
@@ -181,10 +192,12 @@ namespace LM35tempAndClock.ViewModel
             }
             if (!bPortOpen && buttonPressed)
             {
+                //get the observable value SelectedItem from port picker in xaml
+                //and assign it to PortName to specify which serialPort to open
                 serialPort.PortName = SelectedItem.ToString();
                 serialPort.Open();
-                LblOpenClose = "Close";
-                bPortOpen = true;
+                LblOpenClose = "Close"; //sets the button text to "Close"
+                bPortOpen = true; //toggles button state
                 
             }
             else
@@ -200,7 +213,8 @@ namespace LM35tempAndClock.ViewModel
         {
             double temperature0 = lmClass.GetTemperature(lmClass.analogValue(validPacket, 0));
             double temperature1 = lmClass.GetTemperature(lmClass.analogValue(validPacket, 1));
-            tempData.LblTemperature0 = temperature0.ToString("  00.0") + " °C";
+            //set the LblTemperature variable in the tempData class so then it can be referenced in the UserInterface.xaml
+            tempData.LblTemperature0 = temperature0.ToString("  00.0") + " °C"; //formats the display of temperature data
             tempData.LblTemperature1 = temperature1.ToString("  00.0") + " °C";
         }
 
@@ -209,9 +223,9 @@ namespace LM35tempAndClock.ViewModel
             double temperature = (voltage / 10);
             if (temperature > 25)
             {
-                stringBuilderSend[3] = '0';
-                Led1 = "ledon.png";
-                LblWarning = "  To Hot!";
+                stringBuilderSend[3] = '0'; //gets ready to turn the active low LED on
+                Led1 = "ledon.png"; //changes the software led
+                LblWarning = "  To Hot!"; //user interface danger warning
 
             }
             else if (temperature < 24.7)
@@ -220,7 +234,7 @@ namespace LM35tempAndClock.ViewModel
                 Led1 = "ledoff.png";
                 LblWarning = "  Okay";
             }
-            sendPacket();
+            sendPacket(); //sends the serial data specified by the stringBuilderSend
         }
 
         private void sendPacket()
@@ -230,19 +244,19 @@ namespace LM35tempAndClock.ViewModel
             {
                 for (int i = 3; i < 7; i++)
                 {
-                    calSendChkSum += (byte)stringBuilderSend[i];
+                    calSendChkSum += (byte)stringBuilderSend[i]; //checks that the packet trying to be sent is valid
                 }
                 calSendChkSum %= 1000;
                 stringBuilderSend.Remove(7, 3);
                 stringBuilderSend.Insert(7, calSendChkSum.ToString());
-                string messageOut = stringBuilderSend.ToString();
-                messageOut += "\r\n";
+                string messageOut = stringBuilderSend.ToString(); //sets up the serial data to be sent
+                messageOut += "\r\n"; //adds a carrige return line feed to serial data
                 byte[] messageBytes = Encoding.UTF8.GetBytes(messageOut);
-                serialPort.Write(messageBytes, 0, messageBytes.Length);
+                serialPort.Write(messageBytes, 0, messageBytes.Length); //sends the message through the serial port
             }
             catch (Exception ex)
             {
-               // DisplayAlert("Alert", ex.Message, "OK");
+              // DisplayAlert("Alert", ex.Message, "OK");
             }
 
         }
