@@ -69,7 +69,7 @@ namespace LM35tempAndClock.ViewModel
 
         public MainViewModel()
         {
-            ports = SerialPort.GetPortNames();
+            ports = SerialPort.GetPortNames(); //Gets Com#
             //Sends the selected port through MVVM to the AppSheel.xaml
             ItemsSource = ports;
             SelectedIndex = ports.Length;
@@ -93,12 +93,12 @@ namespace LM35tempAndClock.ViewModel
             //RPHistory is a checkbox linked from AppShell.xaml
             if (RPHistory == true)
             {
-                //if the checkbox is checked scroll the data
+                //if the checkbox is checked scroll the data in debug window
                 ReceivedData = NewPacket + ReceivedData;
             }
             else
             {
-                //if the checkbox is unchecked just how one line updating
+                //if the checkbox is unchecked one line continuously updating in debug window
                 ReceivedData = NewPacket;
             }
 
@@ -109,33 +109,40 @@ namespace LM35tempAndClock.ViewModel
 
                 if (NewPacket.Substring(0, 3) == "###")
                 {
-                    newPacketNumber = Convert.ToInt32(NewPacket.Substring(3, 3));
+                    newPacketNumber = Convert.ToInt32(NewPacket.Substring(3, 3)); //check the number of the received packet
 
-                    if (oldPacketNumber > -1)
+                    if (oldPacketNumber > -1)   // if oldPacketNumber has been assigned a value then 
                     {
-                        if (newPacketNumber < oldPacketNumber)
+                        // if the new packet number is less than the old packet number it has either rolled over or something went wrong
+                        if (newPacketNumber < oldPacketNumber) 
                         {
-                            packetRollover++;
-                            if (oldPacketNumber != 999)
+                            packetRollover++; // add 1 to rollover value in debug 
+                            // if the oldPacket number is not 999 then the packet number hasn't rolled over meaning packets were lost
+                            if (oldPacketNumber != 999) 
                             {
-                                lostPacketCount += 999 - oldPacketNumber + newPacketNumber;
+                                // calculate how many packets were lost and display it to the debug window
+                                lostPacketCount += 999 - oldPacketNumber + newPacketNumber; 
                             }
                         }
                         else
                         {
-                            if (newPacketNumber != oldPacketNumber + 1)
+                            // if the new packet number hasn't increased by only one then packets were skipped
+                            if (newPacketNumber != oldPacketNumber + 1) 
                             {
+                                // calculate how many packets were skipped and display it to the packets lost in debug window
                                 lostPacketCount += newPacketNumber - oldPacketNumber;
                             }
                         }
                     }
+                    // calculate the expected check sum
                     for (int i = 3; i < 34; i++)
                     {
                         calChkSum += (byte)NewPacket[i];
                     }
                     calChkSum %= 1000;
+                    // view the actual check sum
                     int recChkSum = Convert.ToInt32(NewPacket.Substring(34, 3));
-                    // if the packet is valid then
+                    // if the check sum's are equal the packet is valid then
                     if (recChkSum == calChkSum)
                     {
                         Temperature(NewPacket);
@@ -144,6 +151,7 @@ namespace LM35tempAndClock.ViewModel
                     }
                     else
                     {
+                        // if the check sum's dont equal something went wrong 
                         chkSumError++;
                     }
                     // locally parse all the data
@@ -163,6 +171,7 @@ namespace LM35tempAndClock.ViewModel
                                        $"{chkSumError,-14}" +
                                        $"{packetRollover,-14}\r\n";
 
+                    //PPHistory is a checkbox linked from AppShell.xaml
                     if (PPHistory == true)
                     {
                         //send the parsed data to debug window and scroll
@@ -214,7 +223,7 @@ namespace LM35tempAndClock.ViewModel
             double temperature0 = lmClass.GetTemperature(lmClass.analogValue(validPacket, 0));
             double temperature1 = lmClass.GetTemperature(lmClass.analogValue(validPacket, 1));
             //set the LblTemperature variable in the tempData class so then it can be referenced in the UserInterface.xaml
-            tempData.LblTemperature0 = temperature0.ToString("  00.0") + " °C"; //formats the display of temperature data
+            tempData.LblTemperature0 = temperature0.ToString("  00.0") + " °C"; //formats the display of temperature data in userinterface window
             tempData.LblTemperature1 = temperature1.ToString("  00.0") + " °C";
         }
 
